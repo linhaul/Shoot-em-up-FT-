@@ -21,21 +21,21 @@ A motivational experiment
 As I progress, I’ll be updating this README with new information and progress logs.
 
 📅 Roadmap (Planned Features)
- Basic player movement
+ ✅Basic player movement 
 
- Shooting mechanics
+ ❌Shooting mechanics
 
- Enemy spawning
+ ❌Enemy spawning
 
- Basic UI (score, health)
+ ❌Basic UI (score, health)
 
- Sound & music
+ ❌Sound & music
 
- Game over / restart system
+ ❌Game over / restart system
 
- Polish & balancing
+ ❌Polish & balancing
 
- Build and share!
+ ❌Build and share!
 
 🛠️ Tech Stack
 Unity3D (2022.x or later)
