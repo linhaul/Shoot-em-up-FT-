@@ -48,9 +48,11 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.49f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\DestroyOffScreen.cs" />
     <Compile Include="Assets\Scripts\ScrollingBackground.cs" />
     <Compile Include="Assets\Scripts\BackgroundScroll.cs" />
-    <Compile Include="Assets\Scripts\BPMovement.cs" />
+    <Compile Include="Assets\Scripts\PlayerShooting.cs" />
+    <Compile Include="Assets\Scripts\EnemyDestroy.cs" />
     <Compile Include="Assets\Scripts\ShipMovement.cs" />
   </ItemGroup>
   <ItemGroup>

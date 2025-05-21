@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class ShipMovement : MonoBehaviour
@@ -5,27 +6,39 @@ public class ShipMovement : MonoBehaviour
     public Camera mainCamera;
     public float moveSpeed = 1f;
     private Vector3 bottomLeft, topRight;
+    private Rigidbody2D _rb;
+
     private void Start()
     {
+        _rb = GetComponent<Rigidbody2D>();
         bottomLeft = mainCamera.ScreenToWorldPoint(new Vector3(0, 0, mainCamera.nearClipPlane));
         topRight = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, mainCamera.nearClipPlane));
     }
 
-    private void Update()
-{
-    float moveX = Input.GetAxisRaw("Horizontal");
-    float moveY = Input.GetAxisRaw("Vertical");
+    private void ClampPosition()
+    {
+        Vector3 pos = transform.position;
 
-    Vector3 playerShipDirection = new Vector3(moveX, moveY, 0f).normalized; // Нормализуем
+        float shipHalfWidth = GetComponent<SpriteRenderer>().bounds.extents.x;
+        float shipHalfHeight = GetComponent<SpriteRenderer>().bounds.extents.y;
 
-    transform.position += playerShipDirection * moveSpeed * Time.deltaTime;
+        pos.x = Mathf.Clamp(pos.x, bottomLeft.x + shipHalfWidth, topRight.x - shipHalfWidth);
+        pos.y = Mathf.Clamp(pos.y, bottomLeft.y + shipHalfHeight, topRight.y - shipHalfHeight);
 
-    Vector3 clampedPosition = transform.position;
-    float shipHalfWidth = GetComponent<SpriteRenderer>().bounds.extents.x;
-    float shipHalfHeight = GetComponent<SpriteRenderer>().bounds.extents.y;
-    clampedPosition.x = Mathf.Clamp(clampedPosition.x, bottomLeft.x + shipHalfWidth, topRight.x - shipHalfWidth);
-    clampedPosition.y = Mathf.Clamp(clampedPosition.y, bottomLeft.y + shipHalfHeight, topRight.y - shipHalfHeight);
-    transform.position = clampedPosition;
-}
+        transform.position = pos;
+    }
+
+
+    private void FixedUpdate()
+    {
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
+
+        Vector2 playerShipDirection = new Vector2(moveX, moveY).normalized;
+
+        _rb.linearVelocity = playerShipDirection * moveSpeed;
+
+        ClampPosition();
+    }
 
 }
