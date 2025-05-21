@@ -32,7 +32,7 @@ As I progress, I’ll be updating this README with new information and progress 
 
  ✅Basic player movement 
 
- ❌Shooting mechanics
+ ✅Shooting mechanics
 
  ❌Enemy spawning
 
