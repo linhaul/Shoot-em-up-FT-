@@ -1,4 +1,7 @@
+using System.Xml.Serialization;
+using TMPro.EditorUtilities;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerShooting : MonoBehaviour
@@ -11,13 +14,26 @@ public class PlayerShooting : MonoBehaviour
 
     private float fireCooldown = 0f;
 
-    private enum fireMode { LinearShot, SpreadShot };
-    private fireMode currentMode = fireMode.LinearShot;
+    private enum FireMode { LinearShot, SpreadShot };
+    private FireMode currentMode = FireMode.LinearShot;
+    public PlayerUIManager uiManager;
 
+    private void Start()
+    {
+        UpdateUI();
+    }
     private void Update()
     {
         HandleShootingInput();
         HandleModeSwitchInput();
+    }
+
+    void UpdateUI()
+    {
+        if (uiManager != null)
+        {
+            uiManager.UpdateShotType(currentMode.ToString());
+        }
     }
 
     void HandleShootingInput()
@@ -35,7 +51,8 @@ public class PlayerShooting : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            currentMode = currentMode == fireMode.LinearShot ? fireMode.SpreadShot : fireMode.LinearShot;
+            currentMode = currentMode == FireMode.LinearShot ? FireMode.SpreadShot : FireMode.LinearShot;
+            UpdateUI();
         }
     }
 
@@ -43,10 +60,10 @@ public class PlayerShooting : MonoBehaviour
     {
         switch (currentMode)
         {
-            case fireMode.LinearShot:
+            case FireMode.LinearShot:
                 FireLinearShot();
                 break;
-            case fireMode.SpreadShot:
+            case FireMode.SpreadShot:
                 FireSpreadShot();
                 break;
         }
@@ -67,10 +84,10 @@ public class PlayerShooting : MonoBehaviour
 
     void FireSpreadShot()
     {
-        int spreadBullets = bulletsPerShot + 2; // увеличиваем на 2 только для спреда
+        int spreadBullets = bulletsPerShot + 2; 
 
-        float angleStep = 30f / (spreadBullets - 1); // допустим, веер в 30 градусов
-        float startAngle = -15f; // веер от -15 до +15 градусов
+        float angleStep = 30f / (spreadBullets - 1); 
+        float startAngle = -15f; 
 
         for (int i = 0; i < spreadBullets; i++)
         {
