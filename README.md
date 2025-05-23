@@ -36,11 +36,11 @@ As I progress, I’ll be updating this README with new information and progress 
 
  ❌Enemy spawning
 
- ❌Basic UI (score, health)
+ ✅Basic UI (score, health)
 
  ❌Sound & music
 
- ❌Game over / restart system
+ ✅Game over / restart system
 
  ❌Polish & balancing
 
