@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class DestroyOffScreen : MonoBehaviour
 {
-    private Camera mainCamera;
-    private float buffer = 1f;
+    private float buffer = 0.5f; 
 
-    void Start()
+    private void Update()
     {
-        mainCamera = Camera.main;
-    }
+        if (GameBoundsManager.Instance == null) return;
 
-    void Update()
-    {
-        Vector3 screenPos = mainCamera.WorldToViewportPoint(transform.position);
+        float minX = GameBoundsManager.Instance.MinX;
+        float maxX = GameBoundsManager.Instance.MaxX;
+        float minY = GameBoundsManager.Instance.MinY;
+        float maxY = GameBoundsManager.Instance.MaxY;
 
-        if (screenPos.x < -buffer || screenPos.x > 1 + buffer ||
-            screenPos.y < -buffer || screenPos.y > 1 + buffer)
+        Vector3 pos = transform.position;
+
+        if (pos.x < minX - buffer || pos.x > maxX + buffer || pos.y < minY - buffer || pos.y > maxY + buffer)
         {
             Destroy(gameObject);
         }
