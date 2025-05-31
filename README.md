@@ -34,7 +34,7 @@ As I progress, I’ll be updating this README with new information and progress 
 
  ✅Shooting mechanics
 
- ❌Enemy spawning
+ ✅Enemy spawning
 
  ✅Basic UI (score, health)
 
