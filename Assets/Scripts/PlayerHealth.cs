@@ -20,7 +20,7 @@ public class PlayerHealth : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void TakeDamage()
+    public void TakeDamage(int amount)
     {
         if (isInvulnerable) return;
 

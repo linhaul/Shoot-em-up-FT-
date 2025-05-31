@@ -4,7 +4,7 @@ public class EnemyCollisionHandler : MonoBehaviour
 {
     private PlayerHealth playerHealth;
     public int damageToEnemy = 25;
-
+    public int damageToPlayer = 1;
     private void Start()
     {
         playerHealth = GetComponent<PlayerHealth>();
@@ -16,7 +16,7 @@ public class EnemyCollisionHandler : MonoBehaviour
         {
             if (!playerHealth.IsInvulnerable())
             {
-                playerHealth.TakeDamage();
+                playerHealth.TakeDamage(damageToPlayer);
 
                 Enemy enemyHealth = collision.GetComponent<Enemy>();
                 if (enemyHealth != null)

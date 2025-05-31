@@ -3,12 +3,19 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
 public class ShipMovement : MonoBehaviour
 {
+    public static ShipMovement Instance { get; private set; }
     public float moveSpeed = 5f;
 
     private Rigidbody2D _rb;
     private SpriteRenderer _spriteRenderer;
 
     private float minX, maxX, minY, maxY;
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
 
     private void Start()
     {
