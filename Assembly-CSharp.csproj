@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\DestroyOffScreen.cs" />
     <Compile Include="Assets\Scripts\BombPickup.cs" />
+    <Compile Include="Assets\Scripts\EnemySpawnInfo.cs" />
     <Compile Include="Assets\Scripts\EnemyMovement.cs" />
     <Compile Include="Assets\Scripts\ScrollingBackground.cs" />
     <Compile Include="Assets\Scripts\PlayerBombSystem.cs" />
@@ -58,13 +59,14 @@
     <Compile Include="Assets\Scripts\BackgroundScroll.cs" />
     <Compile Include="Assets\Scripts\EnemyShooter.cs" />
     <Compile Include="Assets\Scripts\SuperAttack.cs" />
+    <Compile Include="Assets\Scripts\WaveManager.cs" />
     <Compile Include="Assets\Scripts\EnemyCollisionHandler.cs" />
     <Compile Include="Assets\Scripts\GameBoundsManager.cs" />
     <Compile Include="Assets\Scripts\EnemyBullet.cs" />
     <Compile Include="Assets\Scripts\PlayerShooting.cs" />
     <Compile Include="Assets\Scripts\EnemyDestroy.cs" />
-    <Compile Include="Assets\Scripts\EnemySpawner.cs" />
     <Compile Include="Assets\Scripts\ShipMovement.cs" />
+    <Compile Include="Assets\Scripts\EnemyWave.cs" />
     <Compile Include="Assets\Scripts\PlayerUIManager.cs" />
     <Compile Include="Assets\Scripts\WarningLaser.cs" />
   </ItemGroup>

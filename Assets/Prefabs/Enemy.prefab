@@ -261,10 +261,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPref: {fileID: 6163098607161632419, guid: ee9db4193f259f744bc6478686ab3cb4, type: 3}
-  fireInterval: 4
-  bulletSpeed: 3
+  fireInterval: 1
+  bulletSpeed: 5
   warningLaserPref: {fileID: 8425961452883822564, guid: 53ba2e56b241d24488608adf070bd14c, type: 3}
-  firePattern: 5
+  firePattern: 2
 --- !u!114 &8088645904161572186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,10 +278,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementType: 3
-  speed: 2
+  speed: 1
   sineFrequency: 2
   sineAmplitude: 1
-  hoverTime: 15
+  hoverTime: 5
 --- !u!114 &-4656285551353316543
 MonoBehaviour:
   m_ObjectHideFlags: 0
