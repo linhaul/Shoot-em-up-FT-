@@ -14,6 +14,6 @@ public class EnemyWave
 
     public List<GameObject> autoLayoutPrefs;
 
-    public List<EnemySpawnInfo> enemies;
+    [HideInInspector] public List<GameObject> spawnedEnemies = new();
 }
 

@@ -1,79 +1,133 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
-    public List<EnemyWave> waves = new List<EnemyWave>();
-    private float timer;
-    private int waveIndex = 0;
+    public List<EnemyWave> waves;
+    public float delayBetweenWaves = 2f;
 
-    private void Update()
+    private int currentWaveIndex = 0;
+    private float timer = 0f;
+    private bool waitingForClear = false;
+
+    public GameObject bossPref;
+    public Transform bossSpawnPoint;
+    private bool bossSpawned = false;
+
+    public BossHealthUI bossHealthUI;
+
+    void Update()
     {
-        timer += Time.deltaTime;
+        if (currentWaveIndex >= waves.Count)
+            return;
 
-        while (waveIndex < waves.Count && timer >= waves[waveIndex].spawnTime)
+        if (currentWaveIndex == 0)
         {
-            SpawnWave(waves[waveIndex]);
-            waveIndex++;
+            timer += Time.deltaTime;
+            if (timer >= waves[0].spawnTime)
+            {
+                SpawnWave(currentWaveIndex);
+                currentWaveIndex++;
+                waitingForClear = true;
+            }
+        }
+        else
+        {
+            if (waitingForClear)
+            {
+                if (IsWaveCleared(currentWaveIndex - 1))
+                {
+                    StartCoroutine(SpawnNextWaveWithDelay());
+                    waitingForClear = false;
+                }
+            }
+        }
+
+        if (currentWaveIndex >= waves.Count && !bossSpawned)
+        {
+            if (AllEnemiesDefeated())
+            {
+                SpawnBoss();
+                bossSpawned = true;
+            }
         }
     }
 
-    private void SpawnWave(EnemyWave wave)
-{
-    if (wave.useAutoLayout)
+    bool AllEnemiesDefeated()
     {
-        SpawnAutoLayoutWave(wave);
-    }
-    else
-    {
-        foreach (var enemyInfo in wave.enemies)
+        foreach (var wave in waves)
         {
-            SpawnEnemy(enemyInfo.pref, enemyInfo.position, enemyInfo.movementPattern, enemyInfo.firePattern);
+            wave.spawnedEnemies.RemoveAll(e => e == null);
+            if (wave.spawnedEnemies.Count > 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void SpawnBoss()
+    {
+        GameObject boss = Instantiate(bossPref, bossSpawnPoint.position, Quaternion.identity);
+
+        BossController bossController = boss.GetComponent<BossController>();
+        if (bossController != null && bossHealthUI != null)
+        {
+            bossController.SetBossHealthUI(bossHealthUI);
         }
     }
-}
 
-private void SpawnAutoLayoutWave(EnemyWave wave)
-{
-    float startX = -wave.layoutWidth / 2f;
-    float startY = 6f; // начальная y позиция (выше экрана)
-    float stepX = wave.layoutWidth / Mathf.Max(1, wave.columns - 1);
-    float stepY = wave.layoutHeight / Mathf.Max(1, wave.rows - 1);
-
-    int prefabIndex = 0;
-
-    for (int row = 0; row < wave.rows; row++)
+    IEnumerator SpawnNextWaveWithDelay()
     {
-        for (int col = 0; col < wave.columns; col++)
+        yield return new WaitForSeconds(delayBetweenWaves);
+
+        if (currentWaveIndex < waves.Count)
         {
-            if (prefabIndex >= wave.autoLayoutPrefs.Count)
-                return;
-
-            GameObject prefab = wave.autoLayoutPrefs[prefabIndex];
-            Vector2 spawnPos = new Vector2(startX + col * stepX, startY + row * -stepY);
-            SpawnEnemy(prefab, spawnPos, "StraightDown", "AimAtPlayer");
-
-            prefabIndex++;
+            SpawnWave(currentWaveIndex);
+            currentWaveIndex++;
+            waitingForClear = true;
         }
     }
-}
 
-
-private void SpawnEnemy(GameObject prefab, Vector2 position, string movePattern, string firePattern)
-{
-    GameObject enemy = Instantiate(prefab, position, Quaternion.identity);
-
-    var shooter = enemy.GetComponent<EnemyShooter>();
-    if (shooter != null && System.Enum.TryParse(firePattern, out EnemyShooter.FirePattern fire))
+    bool IsWaveCleared(int waveIndex)
     {
-        shooter.firePattern = fire;
+        var wave = waves[waveIndex];
+        wave.spawnedEnemies.RemoveAll(e => e == null);
+
+        return wave.spawnedEnemies.Count == 0;
     }
 
-    var mover = enemy.GetComponent<EnemyMovement>();
-    if (mover != null && System.Enum.TryParse(movePattern, out EnemyMovement.MovementType movement))
+    void SpawnWave(int index)
     {
-        mover.movementType = movement;
-    }
-}
+        EnemyWave wave = waves[index];
+        wave.spawnedEnemies = new();
 
+        if (wave.useAutoLayout)
+        {
+            float startX = -wave.layoutWidth / 2f;
+            float startY = wave.layoutHeight / 2f;
+
+            int prefabIndex = 0;
+
+            for (int row = 0; row < wave.rows; row++)
+            {
+                for (int col = 0; col < wave.columns; col++)
+                {
+                    if (prefabIndex >= wave.autoLayoutPrefs.Count) return;
+
+                    GameObject prefab = wave.autoLayoutPrefs[prefabIndex];
+                    Vector2 spawnPos = new Vector2(
+                        startX + col * (wave.layoutWidth / Mathf.Max(1, wave.columns - 1)),
+                        startY - row * (wave.layoutHeight / Mathf.Max(1, wave.rows - 1))
+                    );
+
+                    GameObject enemy = Instantiate(prefab, spawnPos, Quaternion.identity);
+                    wave.spawnedEnemies.Add(enemy);
+
+                    prefabIndex++;
+                }
+            }
+        }
+    }
 }
