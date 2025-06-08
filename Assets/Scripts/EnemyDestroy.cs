@@ -4,14 +4,15 @@ public class EnemyDestroy : MonoBehaviour
 {
     public int damage = 1;
     public float superMeterPerHit = 1.5f;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
         {
-            Enemy enemy = collision.GetComponent<Enemy>();
-            if (enemy != null)
+            IDamageable damageable = collision.GetComponent<IDamageable>();
+            if (damageable != null)
             {
-                enemy.TakeDamage(damage);
+                damageable.TakeDamage(damage);
 
                 if (PlayerShooting.Instance != null)
                 {
@@ -23,4 +24,3 @@ public class EnemyDestroy : MonoBehaviour
         }
     }
 }
-

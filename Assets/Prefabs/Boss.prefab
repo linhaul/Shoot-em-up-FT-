@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 2948274020517060773}
   - component: {fileID: 3284489424639184121}
   - component: {fileID: 3047204061612482967}
-  - component: {fileID: 709441692719167027}
+  - component: {fileID: 8549032532684882373}
   m_Layer: 0
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,7 +126,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 2.55
 --- !u!50 &3284489424639184121
 Rigidbody2D:
   serializedVersion: 5
@@ -167,13 +167,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPref: {fileID: 6163098607161632419, guid: ee9db4193f259f744bc6478686ab3cb4, type: 3}
-  fireInterval: 1.5
+  fireInterval: 6
   bulletSpeed: 3
   warningLaserPref: {fileID: 8425961452883822564, guid: 53ba2e56b241d24488608adf070bd14c, type: 3}
   firePattern: 2
   patternSwitchInterval: 5
   availablePatterns: 020000000500000003000000
---- !u!114 &709441692719167027
+--- !u!114 &8549032532684882373
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,4 +186,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1000
-  bossHealthUI: {fileID: 0}
+  currentHealth: 0

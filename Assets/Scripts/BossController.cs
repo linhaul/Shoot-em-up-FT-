@@ -1,32 +1,18 @@
 using UnityEngine;
 
-public class BossController : MonoBehaviour
+public class BossController : MonoBehaviour, IDamageable
 {
     public int maxHealth = 1000;
-    private int currentHealth;
-
+    public int currentHealth;
     private BossHealthUI bossHealthUI;
 
-    private void Start()
-    {
-        currentHealth = maxHealth;
-
-        if (bossHealthUI != null)
-        {
-            bossHealthUI.gameObject.SetActive(true);
-            bossHealthUI.SetMaxHealth(maxHealth);
-        }
-    }
-
-    public void SetBossHealthUI(BossHealthUI ui)
+    public void Init(BossHealthUI ui)
     {
         bossHealthUI = ui;
-        if (bossHealthUI != null)
-        {
-            bossHealthUI.gameObject.SetActive(true);
-            bossHealthUI.SetMaxHealth(maxHealth);
-            bossHealthUI.SetHealth(currentHealth);
-        }
+        currentHealth = maxHealth;
+
+        bossHealthUI.Show();
+        bossHealthUI.SetMaxHealth(maxHealth);
     }
 
     public void TakeDamage(int amount)
@@ -34,22 +20,16 @@ public class BossController : MonoBehaviour
         currentHealth -= amount;
 
         if (bossHealthUI != null)
-        {
             bossHealthUI.SetHealth(currentHealth);
-        }
 
         if (currentHealth <= 0)
-        {
             Die();
-        }
     }
 
     void Die()
     {
         if (bossHealthUI != null)
-        {
-            bossHealthUI.gameObject.SetActive(false);
-        }
+            bossHealthUI.Hide();
 
         Destroy(gameObject);
     }

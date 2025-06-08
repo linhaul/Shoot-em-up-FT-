@@ -10,7 +10,7 @@ public class SuperAttack : MonoBehaviour
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.linearVelocity = Vector2.up * speed;
+            rb.linearVelocity = Vector2.up * speed;  
         }
     }
 
@@ -18,10 +18,10 @@ public class SuperAttack : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            Enemy enemy = collision.GetComponent<Enemy>();
-            if (enemy != null)
+            IDamageable damageable = collision.GetComponent<IDamageable>();
+            if (damageable != null)
             {
-                enemy.TakeDamage(damage);
+                damageable.TakeDamage(damage);
             }
 
             Destroy(gameObject);

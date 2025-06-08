@@ -8,94 +8,40 @@ public class WaveManager : MonoBehaviour
     public float delayBetweenWaves = 2f;
 
     private int currentWaveIndex = 0;
-    private float timer = 0f;
-    private bool waitingForClear = false;
 
     public GameObject bossPref;
     public Transform bossSpawnPoint;
     private bool bossSpawned = false;
 
-    public BossHealthUI bossHealthUI;
+    [SerializeField] private BossHealthUI bossHealthUI;
 
-    void Update()
+    private void Start()
     {
-        if (currentWaveIndex >= waves.Count)
-            return;
-
-        if (currentWaveIndex == 0)
-        {
-            timer += Time.deltaTime;
-            if (timer >= waves[0].spawnTime)
-            {
-                SpawnWave(currentWaveIndex);
-                currentWaveIndex++;
-                waitingForClear = true;
-            }
-        }
-        else
-        {
-            if (waitingForClear)
-            {
-                if (IsWaveCleared(currentWaveIndex - 1))
-                {
-                    StartCoroutine(SpawnNextWaveWithDelay());
-                    waitingForClear = false;
-                }
-            }
-        }
-
-        if (currentWaveIndex >= waves.Count && !bossSpawned)
-        {
-            if (AllEnemiesDefeated())
-            {
-                SpawnBoss();
-                bossSpawned = true;
-            }
-        }
+        StartCoroutine(HandleWaves());
     }
 
-    bool AllEnemiesDefeated()
+    IEnumerator HandleWaves()
     {
-        foreach (var wave in waves)
+        SpawnWave(currentWaveIndex);
+        currentWaveIndex++;
+
+        while (currentWaveIndex < waves.Count)
         {
-            wave.spawnedEnemies.RemoveAll(e => e == null);
-            if (wave.spawnedEnemies.Count > 0)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+            yield return new WaitUntil(() => IsWaveCleared(currentWaveIndex - 1));
+            yield return new WaitForSeconds(delayBetweenWaves);
 
-    void SpawnBoss()
-    {
-        GameObject boss = Instantiate(bossPref, bossSpawnPoint.position, Quaternion.identity);
-
-        BossController bossController = boss.GetComponent<BossController>();
-        if (bossController != null && bossHealthUI != null)
-        {
-            bossController.SetBossHealthUI(bossHealthUI);
-        }
-    }
-
-    IEnumerator SpawnNextWaveWithDelay()
-    {
-        yield return new WaitForSeconds(delayBetweenWaves);
-
-        if (currentWaveIndex < waves.Count)
-        {
             SpawnWave(currentWaveIndex);
             currentWaveIndex++;
-            waitingForClear = true;
         }
-    }
 
-    bool IsWaveCleared(int waveIndex)
-    {
-        var wave = waves[waveIndex];
-        wave.spawnedEnemies.RemoveAll(e => e == null);
+        yield return new WaitUntil(() => IsWaveCleared(currentWaveIndex - 1));
+        yield return new WaitForSeconds(0.5f);
 
-        return wave.spawnedEnemies.Count == 0;
+        if (!bossSpawned)
+        {
+            SpawnBoss();
+            bossSpawned = true;
+        }
     }
 
     void SpawnWave(int index)
@@ -130,4 +76,38 @@ public class WaveManager : MonoBehaviour
             }
         }
     }
+
+    bool IsWaveCleared(int waveIndex)
+    {
+        if (waveIndex < 0 || waveIndex >= waves.Count) return true;
+
+        EnemyWave wave = waves[waveIndex];
+        wave.spawnedEnemies.RemoveAll(e => e == null);
+
+        return wave.spawnedEnemies.Count == 0;
+    }
+
+    void SpawnBoss()
+    {
+        if (bossPref == null || bossSpawnPoint == null || bossHealthUI == null)
+        {
+            Debug.LogError("❌ Не хватает ссылок для спавна босса!");
+            return;
+        }
+
+        GameObject bossGO = Instantiate(bossPref, bossSpawnPoint.position, Quaternion.identity);
+
+        BossController bossController = bossGO.GetComponent<BossController>();
+        if (bossController != null)
+        {
+            bossController.Init(bossHealthUI);
+        }
+        else
+        {
+            Debug.LogError("❌ У босса отсутствует скрипт BossController!");
+        }
+
+        bossSpawned = true;
+}
+
 }
