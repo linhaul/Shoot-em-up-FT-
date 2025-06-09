@@ -64,8 +64,10 @@
     <Compile Include="Assets\Scripts\WaveManager.cs" />
     <Compile Include="Assets\Scripts\EnemyCollisionHandler.cs" />
     <Compile Include="Assets\Scripts\GameBoundsManager.cs" />
+    <Compile Include="Assets\Scripts\CombatKeybindUI.cs" />
     <Compile Include="Assets\Scripts\EnemyBullet.cs" />
     <Compile Include="Assets\Scripts\PlayerShooting.cs" />
+    <Compile Include="Assets\Scripts\CombatKeybindManager.cs" />
     <Compile Include="Assets\Scripts\EnemyDestroy.cs" />
     <Compile Include="Assets\Scripts\BossController.cs" />
     <Compile Include="Assets\Scripts\IDamageable.cs" />
@@ -73,8 +75,10 @@
     <Compile Include="Assets\Scripts\Projectile.cs" />
     <Compile Include="Assets\Scripts\ShipMovement.cs" />
     <Compile Include="Assets\Scripts\EnemyWave.cs" />
+    <Compile Include="Assets\Scripts\SettingsMenuController.cs" />
     <Compile Include="Assets\Scripts\PlayerUIManager.cs" />
     <Compile Include="Assets\Scripts\WarningLaser.cs" />
+    <Compile Include="Assets\Scripts\KeybindLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

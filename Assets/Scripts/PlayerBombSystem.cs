@@ -5,7 +5,6 @@ public class PlayerBombSystem : MonoBehaviour
 {
     public int bombCount = 3;
     public int maxBombs = 3;
-    public KeyCode bombKey = KeyCode.C;
     public float bombDamage = 100f;
     public PlayerUIManager uIManager;
 
@@ -15,7 +14,7 @@ public class PlayerBombSystem : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(bombKey) && bombCount != 0)
+        if (Input.GetKeyDown(CombatKeybindManager.BombKey) && bombCount != 0)
         {
             UseBomb();
         }

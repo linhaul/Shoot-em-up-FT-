@@ -41,12 +41,12 @@ public class PlayerShooting : MonoBehaviour
     {
         HandleModeSwitchInput();
 
-        if (Input.GetKey(KeyCode.Z) && !isShooting)
+        if (Input.GetKey(CombatKeybindManager.FireKey) && !isShooting)
         {
             StartCoroutine(ShootBurst());
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && superReady)
+        if (Input.GetKeyDown(CombatKeybindManager.SuperKey) && superReady)
         {
             ActivateSuperAttack();
         }
@@ -94,7 +94,7 @@ public class PlayerShooting : MonoBehaviour
 
     void HandleModeSwitchInput()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(CombatKeybindManager.SwitchFireModeKey))
         {
             currentMode = currentMode == FireMode.LinearShot ? FireMode.SpreadShot : FireMode.LinearShot;
             UpdateUI();
