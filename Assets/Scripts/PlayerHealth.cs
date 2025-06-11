@@ -52,9 +52,18 @@ public class PlayerHealth : MonoBehaviour
     }
 
     void Death()
+{
+    var gameOverController = FindFirstObjectByType <GameOverMenuController>();
+    if (gameOverController != null)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        gameOverController.ShowGameOver();
     }
+    else
+    {
+        Debug.LogWarning("GameOverMenuController не найден в сцене!");
+    }
+}
+
 
     public bool IsInvulnerable()
     {

@@ -12,12 +12,18 @@ public class SettingsMenuController : MonoBehaviour
     public TMP_Dropdown resolutionDropdown;
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
+    public Toggle fullscreenToggle;
 
     private Resolution[] resolutions;
+
+    private const string RESOLUTION_PREF_KEY = "ResolutionIndex";
+    private const string FULLSCREEN_PREF_KEY = "Fullscreen";
 
     void Start()
     {
         LoadResolutions();
+
+        ApplySavedSettings();
     }
 
     void LoadResolutions()
@@ -25,26 +31,66 @@ public class SettingsMenuController : MonoBehaviour
         resolutions = Screen.resolutions
             .Select(res => new Resolution { width = res.width, height = res.height })
             .Distinct()
+            .OrderByDescending(r => r.width * r.height)
             .ToArray();
 
         resolutionDropdown.ClearOptions();
-
         var options = resolutions.Select(res => $"{res.width} x {res.height}").ToList();
         resolutionDropdown.AddOptions(options);
 
-        int currentIndex = System.Array.FindIndex(resolutions,
-            r => r.width == Screen.currentResolution.width && r.height == Screen.currentResolution.height);
+        resolutionDropdown.onValueChanged.RemoveAllListeners();
+        resolutionDropdown.onValueChanged.AddListener(SetResolution);
+    }
 
-        resolutionDropdown.value = currentIndex;
+    void ApplySavedSettings()
+    {
+        int savedIndex = PlayerPrefs.GetInt(RESOLUTION_PREF_KEY, resolutions.Length - 1); 
+        bool isFullscreen = PlayerPrefs.GetInt(FULLSCREEN_PREF_KEY, 1) == 1;
+
+        if (savedIndex < 0 || savedIndex >= resolutions.Length)
+            savedIndex = resolutions.Length - 1;
+
+        Resolution res = resolutions[savedIndex];
+
+        Screen.SetResolution(res.width, res.height, isFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
+
+        resolutionDropdown.value = savedIndex;
         resolutionDropdown.RefreshShownValue();
+
+        fullscreenToggle.isOn = isFullscreen;
     }
 
     public void SetResolution(int index)
     {
+        if (resolutions == null || resolutions.Length == 0)
+            return;
+
         Resolution res = resolutions[index];
-        Screen.SetResolution(res.width, res.height, FullScreenMode.Windowed);
-        Debug.Log($"Установлено разрешение: {res.width}x{res.height}");
+        bool isFullscreen = fullscreenToggle.isOn;
+
+        Screen.SetResolution(res.width, res.height, isFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
+
+        PlayerPrefs.SetInt(RESOLUTION_PREF_KEY, index);
+        PlayerPrefs.Save();
+
+        Debug.Log($"Установлено разрешение: {res.width}x{res.height}, Fullscreen: {isFullscreen}");
     }
+
+    public void SetFullscreen(bool isFullscreen)
+    {
+        Debug.Log("Toggle значение: " + isFullscreen); // <-- ЭТО!
+        
+        Resolution current = resolutions[resolutionDropdown.value];
+        FullScreenMode mode = isFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+
+        Screen.SetResolution(current.width, current.height, mode);
+
+        PlayerPrefs.SetInt(FULLSCREEN_PREF_KEY, isFullscreen ? 1 : 0);
+        PlayerPrefs.Save();
+
+        Debug.Log("Fullscreen переключен: " + isFullscreen);
+    }
+
 
     public void SetMusicVolume(float volume)
     {

@@ -57,6 +57,7 @@
     <Compile Include="Assets\Scripts\PlayerHealth.cs" />
     <Compile Include="Assets\Scripts\BossHealthUI.cs" />
     <Compile Include="Assets\Scripts\BossShooter.cs" />
+    <Compile Include="Assets\Scripts\GameOverMenuController.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\BackgroundScroll.cs" />
     <Compile Include="Assets\Scripts\EnemyShooter.cs" />
