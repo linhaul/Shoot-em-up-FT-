@@ -52,13 +52,22 @@ public class GameBoundsManager : MonoBehaviour
         rightPanel.GetWorldCorners(rightCorners);
         float rightPanelLeftEdgeX = rightCorners[0].x;
 
-        float camHeight = 2f * mainCamera.orthographicSize;
-        float camY = mainCamera.transform.position.y;
+        Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0f, 0f, mainCamera.nearClipPlane));
+        Vector3 topRight = mainCamera.ViewportToWorldPoint(new Vector3(1f, 1f, mainCamera.nearClipPlane));
 
         MinX = leftPanelRightEdgeX;
         MaxX = rightPanelLeftEdgeX;
 
-        MinY = camY - camHeight / 2f;
-        MaxY = camY + camHeight / 2f;
+        MinY = bottomLeft.y;
+        MaxY = topRight.y;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(new Vector3(MinX, MinY), new Vector3(MinX, MaxY));
+        Gizmos.DrawLine(new Vector3(MaxX, MinY), new Vector3(MaxX, MaxY));
+        Gizmos.DrawLine(new Vector3(MinX, MinY), new Vector3(MaxX, MinY));
+        Gizmos.DrawLine(new Vector3(MinX, MaxY), new Vector3(MaxX, MaxY));
     }
 }

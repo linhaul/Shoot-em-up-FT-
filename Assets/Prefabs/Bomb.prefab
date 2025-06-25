@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 2711154357560267101}
   - component: {fileID: 3225869528133754394}
   - component: {fileID: -4446379122732911273}
+  - component: {fileID: -1860180650147130763}
+  - component: {fileID: 6115778500991378786}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Bomb
@@ -165,3 +167,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2025d14a90adc404ba09db41f2d98afd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-1860180650147130763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627348880087830349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 232af6481b1e4734db837cbc885e5c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6115778500991378786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627348880087830349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab7f646786fa30f4aad1551377bb935a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3

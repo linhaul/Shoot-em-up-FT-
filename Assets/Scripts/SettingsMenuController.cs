@@ -22,8 +22,18 @@ public class SettingsMenuController : MonoBehaviour
     void Start()
     {
         LoadResolutions();
-
         ApplySavedSettings();
+
+        float savedMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        musicVolumeSlider.value = savedMusicVolume;
+
+        musicVolumeSlider.onValueChanged.RemoveAllListeners();
+        musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
+
+        float savedSfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
+        sfxVolumeSlider.value = savedSfxVolume;
+        sfxVolumeSlider.onValueChanged.RemoveAllListeners();
+        sfxVolumeSlider.onValueChanged.AddListener(SetSFXVolume);
     }
 
     void LoadResolutions()
@@ -31,6 +41,7 @@ public class SettingsMenuController : MonoBehaviour
         resolutions = Screen.resolutions
             .Select(res => new Resolution { width = res.width, height = res.height })
             .Distinct()
+            .Where(res => res.width >= 1280 && res.width <= 1920 && res.height >= 720 && res.height <= 1080)
             .OrderByDescending(r => r.width * r.height)
             .ToArray();
 
@@ -44,7 +55,7 @@ public class SettingsMenuController : MonoBehaviour
 
     void ApplySavedSettings()
     {
-        int savedIndex = PlayerPrefs.GetInt(RESOLUTION_PREF_KEY, resolutions.Length - 1); 
+        int savedIndex = PlayerPrefs.GetInt(RESOLUTION_PREF_KEY, resolutions.Length - 1);
         bool isFullscreen = PlayerPrefs.GetInt(FULLSCREEN_PREF_KEY, 1) == 1;
 
         if (savedIndex < 0 || savedIndex >= resolutions.Length)
@@ -78,8 +89,6 @@ public class SettingsMenuController : MonoBehaviour
 
     public void SetFullscreen(bool isFullscreen)
     {
-        Debug.Log("Toggle значение: " + isFullscreen); // <-- ЭТО!
-        
         Resolution current = resolutions[resolutionDropdown.value];
         FullScreenMode mode = isFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
 
@@ -91,15 +100,21 @@ public class SettingsMenuController : MonoBehaviour
         Debug.Log("Fullscreen переключен: " + isFullscreen);
     }
 
-
     public void SetMusicVolume(float volume)
     {
         Debug.Log("Музыка громкость: " + volume);
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.SetMusicVolume(volume);
+        }
     }
+
 
     public void SetSFXVolume(float volume)
     {
         Debug.Log("SFX громкость: " + volume);
+        PlayerPrefs.SetFloat("SFXVolume", volume);
+        PlayerPrefs.Save();
     }
 
     public void OpenSettings()

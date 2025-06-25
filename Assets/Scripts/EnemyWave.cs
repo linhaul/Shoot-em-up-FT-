@@ -15,5 +15,11 @@ public class EnemyWave
     public List<GameObject> autoLayoutPrefs;
 
     [HideInInspector] public List<GameObject> spawnedEnemies = new();
+
+    [Header("Bomb spawn after wave")]
+    public bool spawnBombInThisWave = false;
+    public GameObject bombPrefab;
 }
+
+
 

@@ -20,7 +20,7 @@ public class PlayerShooting : MonoBehaviour
     public float superMeterMax = 100f;
     private float superMeterCurrent = 0f;
 
-    public UnityEngine.UI.Image superMeterFillImage;
+    public UnityEngine.UI.Slider superMeterSlider;
     public GameObject superAttackPrefab;
 
     private bool superReady => superMeterCurrent >= superMeterMax;
@@ -35,10 +35,20 @@ public class PlayerShooting : MonoBehaviour
     private void Start()
     {
         UpdateUI();
+
+        if (superMeterSlider != null)
+        {
+            superMeterSlider.minValue = 0f;
+            superMeterSlider.maxValue = 1f;
+            superMeterSlider.value = 0f;
+        }
     }
 
     private void Update()
     {
+        if (GameOverMenuController.IsGameOver)
+            return;
+            
         HandleModeSwitchInput();
 
         if (Input.GetKey(CombatKeybindManager.FireKey) && !isShooting)
@@ -67,9 +77,9 @@ public class PlayerShooting : MonoBehaviour
 
     void UpdateSuperMeterUI()
     {
-        if (superMeterFillImage != null)
+        if (superMeterSlider != null)
         {
-            superMeterFillImage.fillAmount = superMeterCurrent / superMeterMax;
+            superMeterSlider.value = superMeterCurrent / superMeterMax;
         }
     }
 
@@ -79,8 +89,8 @@ public class PlayerShooting : MonoBehaviour
         if (superMeterCurrent > superMeterMax)
             superMeterCurrent = superMeterMax;
 
-        if (superMeterFillImage != null)
-            superMeterFillImage.fillAmount = superMeterCurrent / superMeterMax;
+        if (superMeterSlider != null)
+            superMeterSlider.value = superMeterCurrent / superMeterMax;
     }
 
     void UpdateUI()

@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Xml.Serialization;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -13,6 +11,7 @@ public class PlayerHealth : MonoBehaviour
     public float flashInterval = 0.1f;
     private bool isInvulnerable = false;
     private SpriteRenderer spriteRenderer;
+
     private void Start()
     {
         currentLifes = maxLifes;
@@ -52,18 +51,22 @@ public class PlayerHealth : MonoBehaviour
     }
 
     void Death()
-{
-    var gameOverController = FindFirstObjectByType <GameOverMenuController>();
-    if (gameOverController != null)
     {
-        gameOverController.ShowGameOver();
-    }
-    else
-    {
-        Debug.LogWarning("GameOverMenuController не найден в сцене!");
-    }
-}
+        var gameOverController = FindFirstObjectByType<GameOverMenuController>();
+        if (gameOverController != null)
+        {
+            gameOverController.ShowGameOver();
 
+            if (MusicManager.Instance != null)
+            {
+                MusicManager.Instance.PlayDeathMusic();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("GameOverMenuController не найден в сцене!");
+        }
+    }
 
     public bool IsInvulnerable()
     {

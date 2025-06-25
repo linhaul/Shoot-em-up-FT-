@@ -4,6 +4,7 @@ public class SuperAttack : MonoBehaviour
 {
     public float speed = 20f;
     public int damage = 100;
+    public GameObject hitEffectPrefab; 
 
     private void Start()
     {
@@ -18,6 +19,11 @@ public class SuperAttack : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
+            if (hitEffectPrefab != null)
+            {
+                Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+            }
+
             IDamageable damageable = collision.GetComponent<IDamageable>();
             if (damageable != null)
             {

@@ -36,7 +36,7 @@ public class ShipMovement : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+   private void FixedUpdate()
     {
         UpdateBoundsFromManager();
 
@@ -45,16 +45,22 @@ public class ShipMovement : MonoBehaviour
 
         Vector2 direction = new Vector2(moveX, moveY).normalized;
 
-        _rb.linearVelocity = direction * moveSpeed;
-
-        Vector3 pos = transform.position;
-
         float halfWidth = _spriteRenderer.bounds.extents.x;
         float halfHeight = _spriteRenderer.bounds.extents.y;
 
-        pos.x = Mathf.Clamp(pos.x, minX + halfWidth, maxX - halfWidth);
-        pos.y = Mathf.Clamp(pos.y, minY + halfHeight, maxY - halfHeight);
+        float spriteHeightPixels = _spriteRenderer.sprite.rect.height;
+        float pivotYPixels = _spriteRenderer.sprite.pivot.y;
 
-        transform.position = pos;
+        float pivotYOffsetNormalized = (pivotYPixels / spriteHeightPixels) - 0.5f;
+        float pivotYOffsetWorld = pivotYOffsetNormalized * _spriteRenderer.bounds.size.y;
+
+        Vector2 pos = _rb.position;
+
+        pos.x = Mathf.Clamp(pos.x, minX + halfWidth, maxX - halfWidth);
+        pos.y = Mathf.Clamp(pos.y, minY + halfHeight + pivotYOffsetWorld, maxY - halfHeight + pivotYOffsetWorld);
+
+        _rb.position = pos;
+        _rb.linearVelocity = direction * moveSpeed;
     }
+
 }

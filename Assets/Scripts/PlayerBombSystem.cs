@@ -14,6 +14,9 @@ public class PlayerBombSystem : MonoBehaviour
     }
     private void Update()
     {
+        if (GameOverMenuController.IsGameOver)
+            return;
+
         if (Input.GetKeyDown(CombatKeybindManager.BombKey) && bombCount != 0)
         {
             UseBomb();

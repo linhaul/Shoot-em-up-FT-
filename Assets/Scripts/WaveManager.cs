@@ -28,6 +28,13 @@ public class WaveManager : MonoBehaviour
         while (currentWaveIndex < waves.Count)
         {
             yield return new WaitUntil(() => IsWaveCleared(currentWaveIndex - 1));
+            
+            EnemyWave clearedWave = waves[currentWaveIndex - 1];
+            if (clearedWave.spawnBombInThisWave && clearedWave.bombPrefab != null)
+            {
+                SpawnBombForWave(clearedWave);
+            }
+
             yield return new WaitForSeconds(delayBetweenWaves);
 
             SpawnWave(currentWaveIndex);
@@ -35,6 +42,13 @@ public class WaveManager : MonoBehaviour
         }
 
         yield return new WaitUntil(() => IsWaveCleared(currentWaveIndex - 1));
+
+        EnemyWave lastWave = waves[currentWaveIndex - 1];
+        if (lastWave.spawnBombInThisWave && lastWave.bombPrefab != null)
+        {
+            SpawnBombForWave(lastWave);
+        }
+
         yield return new WaitForSeconds(0.5f);
 
         if (!bossSpawned)
@@ -91,7 +105,7 @@ public class WaveManager : MonoBehaviour
     {
         if (bossPref == null || bossSpawnPoint == null || bossHealthUI == null)
         {
-            Debug.LogError("❌ Не хватает ссылок для спавна босса!");
+            Debug.LogError("Не хватает ссылок для спавна босса!");
             return;
         }
 
@@ -104,10 +118,23 @@ public class WaveManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("❌ У босса отсутствует скрипт BossController!");
+            Debug.LogError("У босса отсутствует скрипт BossController!");
+        }
+
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.PlayBossMusic();
         }
 
         bossSpawned = true;
-}
+    }
 
+
+    private void SpawnBombForWave(EnemyWave wave)
+    {
+        float xPos = Random.Range(-wave.layoutWidth / 2f, wave.layoutWidth / 2f);
+        float yPos = wave.layoutHeight / 2f + 1f;
+
+        Instantiate(wave.bombPrefab, new Vector2(xPos, yPos), Quaternion.identity);
+    }
 }

@@ -180,3 +180,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   damage: 1000
+  hitEffectPrefab: {fileID: 7649664465709833797, guid: a79499689cd996e48acbb4a4768f26f1, type: 3}

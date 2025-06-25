@@ -144,6 +144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   superMeterPerHit: 1.5
+  hitEffectPrefab: {fileID: 7649664465709833797, guid: a79499689cd996e48acbb4a4768f26f1, type: 3}
 --- !u!70 &-5846425325860006299
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

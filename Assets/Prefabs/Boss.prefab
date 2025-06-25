@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPref: {fileID: 6163098607161632419, guid: ee9db4193f259f744bc6478686ab3cb4, type: 3}
-  fireInterval: 0.5
+  fireInterval: 10.5
   bulletSpeed: 10
   warningLaserPref: {fileID: 8425961452883822564, guid: 53ba2e56b241d24488608adf070bd14c, type: 3}
   firePattern: 2
